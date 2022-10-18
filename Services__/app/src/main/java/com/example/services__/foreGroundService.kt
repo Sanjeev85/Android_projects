@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.media.session.PlaybackState.ACTION_STOP
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 
 class foreGroundService : Service() {
@@ -17,6 +18,7 @@ class foreGroundService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.e("jjjjj","PPPPPPP")
         if (intent?.action != null && intent.action!!.equals(ACTION_STOP)) {
             stopSelf()
         }
@@ -37,7 +39,7 @@ class foreGroundService : Service() {
 
     private fun generateForegroundNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val intentMainLanding = Intent(this, MainActivity::class.java)
+            val intentMainLanding = Intent(this, ::class.java)
             val pendingIntent =
                 PendingIntent.getActivity(this, 0, intentMainLanding, 0)
             iconNotification = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)

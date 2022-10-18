@@ -7,11 +7,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/idEt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="name" />
 
     <EditText
         android:id="@+id/nameET"
@@ -42,6 +37,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Retrieve data" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Text view to get all name -->
+        <TextView
+            android:id="@+id/Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20sp"
+            android:layout_weight="1"
+            android:padding="10sp"
+            android:text="Name\n\n"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="22sp" />
+
+        <!-- Text view to get all ages -->
+        <TextView
+            android:id="@+id/Age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20sp"
+            android:layout_weight="1"
+            android:padding="10sp"
+            android:text="Age\n\n"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/Salary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20sp"
+            android:layout_weight="1"
+            android:padding="10sp"
+            android:text="Salary\n\n"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="22sp" />
+
+    </LinearLayout>
 
     <ListView
         android:id="@+id/lv"
