@@ -12,6 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "RoomDatabase"
-include ':app'
+rootProject.name = "roomDatabase1"
 include ':app'
