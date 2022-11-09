@@ -6,52 +6,94 @@ import android.app.Dialog
 import android.content.SharedPreferences.Editor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ListView
-import android.widget.TextView
+import android.util.Log
+import android.widget.*
 import androidx.core.view.get
 import androidx.room.Database
 import androidx.room.Room
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.w3c.dom.Text
 
 class MainActivity : AppCompatActivity() {
-    lateinit var database: ContactDatabase
-    lateinit var listView: ListView
+    private lateinit var database: ContactDatabase
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        database = Room.databaseBuilder(this, ContactDatabase::class.java, "ContactDb2").build()
-        val displayData = findViewById<Button>(R.id.displayData)
-        val addData: FloatingActionButton = findViewById(R.id.addData)
+        database =
+            Room.databaseBuilder(applicationContext, ContactDatabase::class.java, "ContactDB")
+                .build()
 
-        listView = findViewById(R.id.listView)
+        val listView = findViewById<ListView>(R.id.lvContact)
+        val adapter = ContactAdapter(this, mutableListOf())
+        listView.adapter = adapter
 
-        listView.setOnItemLongClickListener { parent, view, position, id ->
-            val view = parent.get(position)
-            val id = view.findViewById<TextView>(R.id.id).text.toString().toLong()
-            val name = view.findViewById<TextView>(R.id.name).text.toString()
-            val phone = view.findViewById<TextView>(R.id.phone).text.toString()
-            createAlertDialog()
+        listView.setOnItemLongClickListener { _, _, position, _ ->
+            val item = adapter.getItem(position)!!
+
+            GlobalScope.launch(Dispatchers.IO) {
+                database.contactDao().deleteContact(item)
+            }
             true
         }
 
-    }
+        listView.setOnItemClickListener { _, _, position, _ ->
+            val (id, name, phone) = adapter.getItem(position)!!
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Edit Contact")
 
-    private fun createAlertDialog() {
-        val dialog = Dialog(this@MainActivity)
-        dialog.setContentView(R.layout.alert_dialog)
-        dialog.show()
-        val id = dialog.findViewById<EditText>(R.id.input1)
-        val name = dialog.findViewById<EditText>(R.id.input2)
-        val number = dialog.findViewById<EditText>(R.id.input3)
-        val addData = dialog.findViewById<Button>(R.id.addData)
+            val etName = EditText(this)
+            etName.setText(name)
+            val etPhone = EditText(this)
+            etPhone.setText(phone.toString())
 
+            val layout = LinearLayout(this)
+            layout.orientation = LinearLayout.VERTICAL
+            layout.addView(etName)
+            layout.addView(etPhone)
+            builder.setView(layout)
+            builder.setPositiveButton("Update") { dialog, _ ->
+                val name = etName.text.toString()
+                val phone = etPhone.text.toString().toLong()
+                GlobalScope.launch(Dispatchers.IO) {
+                    database.contactDao().updateContact(Contact(id, name, phone))
+                }
+                dialog.dismiss()
+            }
+            builder.setNegativeButton("Cancel") { it, _ -> it.dismiss() }
+            builder.create().show()
+        }
+
+        findViewById<FloatingActionButton>(R.id.btnInsert).setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Insert Contact")
+            val etName = EditText(this)
+            val etPhone = EditText(this)
+            val layout = LinearLayout(this)
+            layout.orientation = LinearLayout.VERTICAL
+            layout.addView(etName)
+            layout.addView(etPhone)
+            builder.setView(layout)
+            builder.setPositiveButton("Insert") { dialog, _ ->
+                val name = etName.text.toString()
+                val phone = etPhone.text.toString().toLong()
+                GlobalScope.launch(Dispatchers.IO) {
+                    database.contactDao().insertContact(Contact(0, name, phone))
+                }
+                dialog.dismiss()
+            }
+            builder.setNegativeButton("Cancel") { it, _ -> it.dismiss() }
+            builder.create().show()
+        }
+
+
+        database.contactDao().getContact().observe(this) {
+            adapter.clear()
+            adapter.addAll(it)
+        }
     }
 }

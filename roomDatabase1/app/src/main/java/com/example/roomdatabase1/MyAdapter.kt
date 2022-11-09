@@ -6,23 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import org.w3c.dom.Text
 
-class MyAdapter(val mCtx: Context, val resource: Int, val items: List<Contact>) :
-    ArrayAdapter<Contact>(mCtx, resource, items) {
 
+class ContactAdapter(private val mContext: Context, items: MutableList<Contact>) :
+    ArrayAdapter<Contact>(mContext, android.R.layout.simple_list_item_2, items) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val layoutInflater: LayoutInflater = LayoutInflater.from(mCtx)
-        val view: View = layoutInflater.inflate(resource, null)
+        var view = convertView
+        if (view == null) {
+            view = LayoutInflater.from(mContext)
+                .inflate(android.R.layout.simple_list_item_2, parent, false)!!
+        }
 
-        val name: TextView = view.findViewById(R.id.input1)
-        val phone: TextView = view.findViewById(R.id.input2)
-        val id: TextView = view.findViewById(R.id.input3)
-        val mItem = items[position]
+        val item = getItem(position)!!
 
-        name.text = mItem.name
-        phone.text = mItem.phone.toString()
-        id.text = mItem.id.toString()
+        view.findViewById<TextView>(android.R.id.text1).text = item.name
+        view.findViewById<TextView>(android.R.id.text2).text = item.phone.toString()
 
         return view
     }
