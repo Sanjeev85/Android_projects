@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/checkLoc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="get Curr Location" />
+
+    <Button
+        android:id="@+id/openMp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="open Map"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/latitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="latitiude "
+            android:textColor="@color/black"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/longi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="longitude "
+            android:textColor="@color/black"
+            android:textSize="25sp" />
+
+
+        <TextView
+            android:id="@+id/provider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Provider "
+            android:textColor="@color/black"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/addRess"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Address "
+            android:textColor="@color/black"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+
+
+    <EditText
+        android:id="@+id/currAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Address " />
+
+    <Button
+        android:id="@+id/getAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Deatils Of Address" />
+
+
+</LinearLayout>
